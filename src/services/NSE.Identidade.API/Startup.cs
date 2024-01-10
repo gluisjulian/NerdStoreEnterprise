@@ -16,7 +16,7 @@ namespace NSE.Identidade.API
             var builder = new ConfigurationBuilder()
                 .SetBasePath(hostEnvironment.ContentRootPath)
                 .AddJsonFile("appsettings.json", true, true)
-                .AddJsonFile($"appsettings.json.{hostEnvironment.EnvironmentName}.json", true, true)
+                .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", true, true)
                 .AddEnvironmentVariables();
         
             if(hostEnvironment.IsDevelopment())
