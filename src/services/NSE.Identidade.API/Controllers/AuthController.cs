@@ -10,7 +10,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NSE.Identidade.API.Extensions;
 using static NSE.Identidade.API.Models.UserViewModels;
-using JwtRegisteredClaimsNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
 namespace NSE.Identidade.API.Controllers
 {
