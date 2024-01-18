@@ -10,7 +10,7 @@ using static NSE.WebApp.MVC.Models.UsuarioViewModel;
 
 namespace NSE.WebApp.MVC.Controllers
 {
-    public class IdentidadeController : Controller
+    public class IdentidadeController : MainController
     {
         private readonly IAutenticacaoService _autenticacaoService;
 
@@ -38,7 +38,11 @@ namespace NSE.WebApp.MVC.Controllers
             //Comunicar com API 
             var resposta = await _autenticacaoService.Registro(usuarioRegistro);
 
-            //if (false) return View(usuarioRegistro);
+            if (ResponsePossuiErros(resposta.responseResult))
+            {
+                return View(usuarioRegistro);
+            }
+
             await RealizarLogin(resposta);
 
             //Realizar login na APP
@@ -64,10 +68,13 @@ namespace NSE.WebApp.MVC.Controllers
             //API - Login
             var resposta = await _autenticacaoService.Login(usuarioLogin);
 
-            //if (false) return View(usuarioLogin);
+            if (ResponsePossuiErros(resposta.responseResult))
+            {
+                return View(usuarioLogin);
+            }
+
             await RealizarLogin(resposta);
 
-            //Realizar login na APP
             return RedirectToAction("Index", "Home");
         }
 
