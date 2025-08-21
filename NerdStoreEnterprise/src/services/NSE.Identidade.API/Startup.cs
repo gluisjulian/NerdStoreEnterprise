@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using NSE.Identidade.API.Data;
 
 namespace NSE.Identidade.API
@@ -18,7 +19,6 @@ namespace NSE.Identidade.API
             Configuration = configuration;
         }
 
-        // Aqui você registra os serviços (injeção de dependência, EF, Identity, etc.)
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -29,12 +29,24 @@ namespace NSE.Identidade.API
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
 
-            services.AddControllersWithViews(); // Exemplo para MVC
+            services.AddControllersWithViews();
+
+            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "NerdStoreEnterprise Identity API",
+                Description = "API do curso de ASP.NET Core Enterprise Application",
+                Contact = new OpenApiContact { Name = "Gabriel Luis Julian", Url = new Uri("https://opensourse.org/licenses/MIT") },
+                License = new OpenApiLicense {Name = "MIT", Url = new Uri("https://opensourse.org/licenses/MIT") }
+            }));
         }
 
-        // Aqui você configura o pipeline de middlewares
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -55,7 +67,6 @@ namespace NSE.Identidade.API
 
             app.UseEndpoints(endpoints =>
             {
-                // Rota padrão estilo MVC
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
